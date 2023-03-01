@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<style>
+
+div {
+    position: absolute;
+    border: 10px solid orange;
+}
+
+body, html {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+</style>
+<script>
+let positions = [];
+let start_time = null;
+let size_x, size_y;
+
+function animate(timestamp) {
+    if(!start_time){
+        start_time = timestamp;
+        return window.requestAnimationFrame(animate);
+    }
+
+    let dt = timestamp - start_time
+
+
+    let elems = document.getElementsByTagName("div");
+
+    let i = 0;
+    for(let div of elems) {
+        let [a,b] = positions[i];
+        let x = Math.sin((Math.floor(dt + a) / 100 * (a / size_y))) * 200;
+        let y = Math.floor(dt / 3);
+
+        x += a;
+        y += b;
+
+        y = y % (size_y / 2)
+
+        div.style.transform = `translate(${x + i*15}px, ${y}px)`;
+        i += 1;
+    }
+
+    window.requestAnimationFrame(animate);
+}
+
+function start() {
+    size_x = window.innerWidth;
+    size_y = window.innerHeight
+    for(let i = 0; i < 1000; i++) {
+        let div = document.createElement("div");
+        div.class = "test"
+        document.body.appendChild(div);
+
+        let img = document.createElement("image");
+
+        let x = Math.random() * size_x / 2;
+        let y = Math.random() * size_y / 2;
+
+        positions[i] = [x, y];
+    }
+
+    window.requestAnimationFrame(animate);
+}
+</script>
+<body onload="start()">
+    <image src = "https://2143.me/f/PhUW.jpg" />
+</body>
+</html>
